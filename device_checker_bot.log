@@ -1,0 +1,50 @@
+2025-08-11 19:43:02,684 - __main__ - INFO - Iniciando Device Checker Bot...
+2025-08-11 19:43:02,684 - __main__ - INFO - Servicios disponibles: 43
+2025-08-11 19:43:02,684 - __main__ - INFO - Categorías: 5
+2025-08-11 19:44:06,663 - __main__ - INFO - Realizando consulta API: Service 1, IMEI: 35676068...
+2025-08-11 19:44:12,183 - __main__ - INFO - Respuesta JSON exitosa para servicio 1
+2025-08-11 19:49:41,944 - __main__ - INFO - Iniciando Device Checker Bot...
+2025-08-11 19:49:41,944 - __main__ - INFO - Servicios disponibles: 43
+2025-08-11 19:49:41,944 - __main__ - INFO - Categorías: 5
+2025-08-11 19:50:31,446 - __main__ - INFO - Realizando consulta API: Service 1, IMEI: 35676068...
+2025-08-11 19:50:37,586 - __main__ - INFO - Respuesta JSON exitosa para servicio 1
+2025-08-11 20:18:04,086 - __main__ - ERROR - Error editando mensaje: HTTPSConnectionPool(host='api.telegram.org', port=443): Read timed out. (read timeout=30)
+2025-08-11 20:18:04,665 - __main__ - ERROR - Error en callback_handler: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: query is too old and response timeout expired or query ID is invalid
+2025-08-11 20:18:11,168 - __main__ - ERROR - Error editando mensaje: HTTPSConnectionPool(host='api.telegram.org', port=443): Read timed out. (read timeout=30)
+2025-08-11 20:18:11,940 - __main__ - ERROR - Error en callback_handler: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: query is too old and response timeout expired or query ID is invalid
+2025-08-11 20:24:55,535 - __main__ - ERROR - Error en callback_handler: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: can't parse entities: Can't find end of the entity starting at byte offset 2845
+2025-08-11 21:17:21,103 - __main__ - INFO - Iniciando Device Checker Bot...
+2025-08-11 21:17:21,103 - __main__ - INFO - Servicios disponibles: 43
+2025-08-11 21:17:21,104 - __main__ - INFO - Categorías: 5
+2025-08-11 21:18:03,828 - __main__ - INFO - Realizando consulta API: Service 1, IMEI: 35676068...
+2025-08-11 21:18:08,396 - __main__ - INFO - Respuesta JSON exitosa para servicio 1
+2025-08-11 21:23:25,126 - __main__ - INFO - Archivos de datos inicializados correctamente
+2025-08-11 21:23:25,126 - __main__ - INFO - Iniciando Device Checker Bot con sistema de autorización...
+2025-08-11 21:23:25,127 - __main__ - INFO - Servicios disponibles: 43
+2025-08-11 21:23:25,127 - __main__ - INFO - Categorías: 5
+2025-08-11 21:23:25,127 - __main__ - INFO - Usuarios autorizados: 2
+2025-08-11 21:23:47,274 - __main__ - WARNING - Acceso no autorizado: Usuario 7655366089 (@AldazUnloc)
+2025-08-11 21:25:15,642 - __main__ - INFO - Archivos de datos inicializados correctamente
+2025-08-11 21:25:15,643 - __main__ - INFO - Iniciando Device Checker Bot con sistema de autorización...
+2025-08-11 21:25:15,643 - __main__ - INFO - Servicios disponibles: 43
+2025-08-11 21:25:15,643 - __main__ - INFO - Categorías: 5
+2025-08-11 21:25:15,643 - __main__ - INFO - Usuarios autorizados: 2
+2025-08-11 21:26:15,111 - __main__ - INFO - Archivos de datos inicializados correctamente
+2025-08-11 21:26:15,112 - __main__ - INFO - Iniciando Device Checker Bot con sistema de autorización...
+2025-08-11 21:26:15,112 - __main__ - INFO - Servicios disponibles: 43
+2025-08-11 21:26:15,112 - __main__ - INFO - Categorías: 5
+2025-08-11 21:26:15,113 - __main__ - INFO - Usuarios autorizados: 2
+2025-08-11 21:26:38,764 - __main__ - WARNING - Acceso no autorizado: Usuario 7655366089 (@AldazUnloc)
+2025-08-11 21:28:36,471 - __main__ - ERROR - Error editando mensaje: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: can't parse entities: Can't find end of the entity starting at byte offset 1328
+2025-08-11 21:30:03,959 - __main__ - INFO - Realizando consulta API: Service 1, IMEI: 35676068...
+2025-08-11 21:30:08,916 - __main__ - INFO - Respuesta JSON exitosa para servicio 1
+2025-08-11 21:30:08,917 - __main__ - INFO - Consulta registrada: Usuario 7655366089, Servicio 1, Status success
+2025-08-11 21:36:57,419 - __main__ - ERROR - Error editando mensaje: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: can't parse entities: Can't find end of the entity starting at byte offset 1328
+2025-08-11 21:37:01,172 - __main__ - ERROR - Error editando mensaje: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: can't parse entities: Can't find end of the entity starting at byte offset 1328
+2025-08-11 21:56:10,617 - __main__ - INFO - Archivos de datos inicializados correctamente
+2025-08-11 21:56:10,617 - __main__ - INFO - Iniciando Device Checker Bot con sistema de autorización...
+2025-08-11 21:56:10,618 - __main__ - INFO - Servicios disponibles: 43
+2025-08-11 21:56:10,618 - __main__ - INFO - Categorías: 5
+2025-08-11 21:56:10,618 - __main__ - INFO - Usuarios autorizados: 2
+2025-08-11 21:56:13,061 - __main__ - WARNING - Acceso no autorizado: Usuario 7655366089 (@AldazUnloc)
+2025-08-11 21:56:47,051 - __main__ - WARNING - Acceso no autorizado: Usuario 7655366089 (@AldazUnloc)
