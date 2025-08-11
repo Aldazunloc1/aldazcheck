@@ -11,6 +11,9 @@ from telegram.ext import (
     ContextTypes, filters, ConversationHandler
 )
 import requests
+import aiohttp
+from threading import Thread
+import time
 
 load_dotenv()
 
@@ -20,6 +23,11 @@ API_KEY = os.getenv("API_KEY")
 # Lee la variable de entorno como string, luego convierte a lista de enteros
 authorized_users_str = os.getenv("AUTHORIZED_USER_IDS", "")
 AUTHORIZED_USER_IDS = [int(uid) for uid in authorized_users_str.split(",") if uid.strip().isdigit()]
+
+# Configuración Keep-Alive para Render
+RENDER_URL = os.getenv("RENDER_URL")  # URL de tu app en Render (ej: https://tu-app.onrender.com)
+KEEP_ALIVE_ENABLED = os.getenv("KEEP_ALIVE_ENABLED", "true").lower() == "true"
+KEEP_ALIVE_INTERVAL = int(os.getenv("KEEP_ALIVE_INTERVAL", "840"))  # 14 minutos por defecto
 
 MAX_RETRIES = 3
 RETRY_DELAY = 2  # segundos
@@ -86,6 +94,73 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 SERVICES_PER_PAGE = 8
+
+class KeepAliveService:
+    """Servicio para mantener el bot activo en Render"""
+    
+    def __init__(self, url: str, interval: int = 840):
+        self.url = url
+        self.interval = interval  # segundos
+        self.running = False
+        self.thread = None
+    
+    def start(self):
+        """Inicia el servicio keep-alive"""
+        if not self.url:
+            logger.warning("⚠️ RENDER_URL no configurado, keep-alive deshabilitado")
+            return
+        
+        if self.running:
+            logger.warning("⚠️ Keep-alive ya está ejecutándose")
+            return
+        
+        self.running = True
+        self.thread = Thread(target=self._keep_alive_loop, daemon=True)
+        self.thread.start()
+        logger.info(f"🔄 Keep-alive iniciado: {self.url} cada {self.interval} segundos")
+    
+    def stop(self):
+        """Detiene el servicio keep-alive"""
+        self.running = False
+        if self.thread:
+            self.thread.join(timeout=5)
+        logger.info("⏹️ Keep-alive detenido")
+    
+    def _keep_alive_loop(self):
+        """Loop principal del keep-alive"""
+        while self.running:
+            try:
+                self._ping()
+                time.sleep(self.interval)
+            except Exception as e:
+                logger.error(f"❌ Error en keep-alive: {e}")
+                time.sleep(60)  # Esperar 1 minuto antes de reintentar
+    
+    def _ping(self):
+        """Realiza ping al servicio"""
+        try:
+            response = requests.get(
+                f"{self.url}/health", 
+                timeout=10,
+                headers={'User-Agent': 'KeepAlive-Bot/1.0'}
+            )
+            
+            if response.status_code == 200:
+                logger.debug(f"✅ Keep-alive ping exitoso: {response.status_code}")
+            else:
+                logger.warning(f"⚠️ Keep-alive ping con status: {response.status_code}")
+                
+        except requests.exceptions.RequestException as e:
+            # Si no existe endpoint /health, hacer ping a la raíz
+            try:
+                response = requests.get(
+                    self.url, 
+                    timeout=10,
+                    headers={'User-Agent': 'KeepAlive-Bot/1.0'}
+                )
+                logger.debug(f"✅ Keep-alive ping (root) exitoso: {response.status_code}")
+            except Exception as e2:
+                logger.warning(f"⚠️ Error en keep-alive ping: {e2}")
 
 class IMEIValidator:
     @staticmethod
@@ -173,8 +248,12 @@ class APIClient:
         
         return None
 
-# Inicializar cliente API
+# Inicializar servicios globales
 api_client = APIClient(API_KEY)
+keep_alive_service = None
+
+if KEEP_ALIVE_ENABLED and RENDER_URL:
+    keep_alive_service = KeepAliveService(RENDER_URL, KEEP_ALIVE_INTERVAL)
 
 def get_categories_keyboard():
     """Teclado de categorías"""
@@ -229,6 +308,15 @@ def is_authorized(user_id: int) -> bool:
     """Verifica si el usuario está autorizado"""
     return user_id in AUTHORIZED_USER_IDS
 
+async def health_check(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Endpoint de health check para keep-alive"""
+    await update.message.reply_text(
+        f"🟢 Bot activo\n"
+        f"🕒 {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+        f"📊 Servicios: {len(SERVICIOS)}\n"
+        f"🔄 Keep-alive: {'✅' if keep_alive_service and keep_alive_service.running else '❌'}"
+    )
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Comando /start"""
     user_id = update.effective_user.id
@@ -241,6 +329,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "🔍 Comandos disponibles:\n"
         "• /services - Ver servicios disponibles\n"
         "• /help - Ayuda y información\n"
+        "• /health - Estado del bot\n"
         "• /cancel - Cancelar operación actual\n\n"
         "✨ <i>¡Listo para hacer consultas IMEI!</i>"
     )
@@ -268,7 +357,8 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "• Serial Apple también soportado\n\n"
         "<b>💡 Consejos:</b>\n"
         "• Los resultados son instantáneos\n"
-        "• Usa /cancel para cancelar en cualquier momento"
+        "• Usa /cancel para cancelar en cualquier momento\n"
+        "• Usa /health para verificar el estado del bot"
     )
     
     await update.message.reply_html(help_text)
@@ -652,6 +742,7 @@ async def set_bot_commands(application):
         BotCommand("start", "Iniciar el bot"),
         BotCommand("services", "Ver servicios disponibles"),
         BotCommand("help", "Ayuda y información"),
+        BotCommand("health", "Estado del bot"),
         BotCommand("cancel", "Cancelar operación actual"),
     ]
     
@@ -675,6 +766,10 @@ def main():
     if not AUTHORIZED_USER_IDS:
         logger.error("❌ AUTHORIZED_USER_IDS no configurado")
         return
+
+    # Iniciar keep-alive service
+    if keep_alive_service:
+        keep_alive_service.start()
 
     # Crear aplicación
     application = Application.builder().token(TOKEN).build()
@@ -720,6 +815,7 @@ def main():
     # Agregar handlers
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("help", help_command))
+    application.add_handler(CommandHandler("health", health_check))
     application.add_handler(conv_handler)
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, unknown_command))
 
@@ -727,6 +823,14 @@ def main():
     logger.info("🤖 Bot IMEI Check iniciando...")
     logger.info(f"📊 Servicios disponibles: {len(SERVICIOS)}")
     logger.info(f"👥 Usuarios autorizados: {len(AUTHORIZED_USER_IDS)}")
+    
+    if KEEP_ALIVE_ENABLED:
+        if RENDER_URL:
+            logger.info(f"🔄 Keep-alive habilitado: {RENDER_URL} cada {KEEP_ALIVE_INTERVAL}s")
+        else:
+            logger.warning("⚠️ Keep-alive habilitado pero RENDER_URL no configurado")
+    else:
+        logger.info("⏹️ Keep-alive deshabilitado")
 
     # Configurar función de inicialización
     async def post_init(application):
@@ -741,14 +845,26 @@ def main():
     
     application.post_init = post_init
 
-    # Ejecutar bot
+    # Función de limpieza al salir
+    def cleanup():
+        """Limpieza al cerrar el bot"""
+        logger.info("🛑 Cerrando bot...")
+        if keep_alive_service:
+            keep_alive_service.stop()
+        logger.info("✅ Bot cerrado correctamente")
+
     try:
+        # Ejecutar bot
         application.run_polling(
             drop_pending_updates=True,
             allowed_updates=Update.ALL_TYPES
         )
+    except KeyboardInterrupt:
+        logger.info("🛑 Bot detenido por usuario")
     except Exception as e:
         logger.error(f"❌ Error ejecutando el bot: {e}")
+    finally:
+        cleanup()
 
 if __name__ == "__main__":
     main()

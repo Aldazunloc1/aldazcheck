@@ -1,0 +1,21 @@
+2025-08-10 07:10:43,260 - __main__ - INFO - 🤖 Bot IMEI Check iniciando...
+2025-08-10 07:10:43,260 - __main__ - INFO - 📊 Servicios disponibles: 44
+2025-08-10 07:10:43,261 - __main__ - INFO - 👥 Usuarios autorizados: 2
+2025-08-10 07:10:43,801 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8189469555:AAFvxfzSCJ8wxtX4J7dDANbHcKr1f9Y6EHI/getMe "HTTP/1.1 200 OK"
+2025-08-10 07:10:44,055 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8189469555:AAFvxfzSCJ8wxtX4J7dDANbHcKr1f9Y6EHI/setMyCommands "HTTP/1.1 200 OK"
+2025-08-10 07:10:44,055 - __main__ - INFO - ✅ Comandos del bot configurados correctamente
+2025-08-10 07:10:44,056 - __main__ - INFO - 🔄 Eliminando webhook existente...
+2025-08-10 07:10:44,194 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8189469555:AAFvxfzSCJ8wxtX4J7dDANbHcKr1f9Y6EHI/deleteWebhook "HTTP/1.1 200 OK"
+2025-08-10 07:10:44,195 - __main__ - INFO - ✅ Webhook eliminado correctamente
+2025-08-10 07:10:44,343 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8189469555:AAFvxfzSCJ8wxtX4J7dDANbHcKr1f9Y6EHI/deleteWebhook "HTTP/1.1 200 OK"
+2025-08-10 07:10:44,345 - telegram.ext.Application - INFO - Application started
+2025-08-10 07:10:49,947 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8189469555:AAFvxfzSCJ8wxtX4J7dDANbHcKr1f9Y6EHI/getUpdates "HTTP/1.1 200 OK"
+2025-08-10 07:10:50,494 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8189469555:AAFvxfzSCJ8wxtX4J7dDANbHcKr1f9Y6EHI/sendMessage "HTTP/1.1 200 OK"
+2025-08-10 07:11:00,092 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8189469555:AAFvxfzSCJ8wxtX4J7dDANbHcKr1f9Y6EHI/getUpdates "HTTP/1.1 200 OK"
+2025-08-10 07:11:04,912 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8189469555:AAFvxfzSCJ8wxtX4J7dDANbHcKr1f9Y6EHI/getUpdates "HTTP/1.1 200 OK"
+2025-08-10 07:11:05,451 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8189469555:AAFvxfzSCJ8wxtX4J7dDANbHcKr1f9Y6EHI/sendMessage "HTTP/1.1 200 OK"
+2025-08-10 07:11:15,056 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8189469555:AAFvxfzSCJ8wxtX4J7dDANbHcKr1f9Y6EHI/getUpdates "HTTP/1.1 200 OK"
+2025-08-10 07:11:25,201 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8189469555:AAFvxfzSCJ8wxtX4J7dDANbHcKr1f9Y6EHI/getUpdates "HTTP/1.1 200 OK"
+2025-08-10 07:11:35,366 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot8189469555:AAFvxfzSCJ8wxtX4J7dDANbHcKr1f9Y6EHI/getUpdates "HTTP/1.1 200 OK"
+2025-08-10 07:11:35,367 - telegram.ext.Application - INFO - Application is stopping. This might take a moment.
+2025-08-10 07:11:35,367 - telegram.ext.Application - INFO - Application.stop() complete
